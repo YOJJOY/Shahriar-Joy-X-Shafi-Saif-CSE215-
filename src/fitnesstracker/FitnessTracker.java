@@ -47,6 +47,9 @@ public class FitnessTracker {
     }
     public static void MainHub(String Name/*need to pass userID here*/){
        System.out.println("Welcome Back "+Name);
+       //1. Add fitness goals
+       //2.tracking progress
+       //3. modify goals
     }
     public static void main(String[] args) {
      HomeScreen();
@@ -54,3 +57,4 @@ public class FitnessTracker {
     
     
 }
+
