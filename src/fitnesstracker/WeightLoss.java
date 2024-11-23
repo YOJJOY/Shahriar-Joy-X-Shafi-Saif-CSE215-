@@ -1,3 +1,5 @@
+package fitnesstracker;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -15,32 +17,36 @@ public class WeightLoss extends FitnessGoals {
         currentWeight = 0.0;
         targetWeight = 0.0;
     }
-    WeightLoss(String name,double currentWeight, double targetWeight){
-        super(name);
+    WeightLoss(double currentWeight, double targetWeight){
         this.currentWeight = currentWeight;
         this.targetWeight = targetWeight;
         
     }
-    public double getCurrentWeight(){
+
+    public double getCurrentWeight() {
         return currentWeight;
     }
-    public void setCurrentWeigth(double newWeight){
-        currentWeight = newWeight;
-    }
-    public double getTargetWeight(){
+
+    public double getTargetWeight() {
         return targetWeight;
     }
-    public void setTargetWeigth(double newWeight){
-        targetWeight = newWeight;
+
+    public void setCurrentWeight(double currentWeight) {
+        this.currentWeight = currentWeight;
     }
+
+    public void setTargetWeight(double targetWeight) {
+        this.targetWeight = targetWeight;
+    }
+   
     public double WeightDifference(){
         if(currentWeight >= targetWeight){
-            return targetWeight-currentWeight;
+            return currentWeight-targetWeight;
         }
         else return 0;
     }
-    
-    
+
+   
     
     
     
