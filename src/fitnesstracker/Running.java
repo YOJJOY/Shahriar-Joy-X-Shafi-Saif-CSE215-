@@ -75,4 +75,13 @@ public class Running implements Runnable{
             trackDuration();
         }
     }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+    
 }
