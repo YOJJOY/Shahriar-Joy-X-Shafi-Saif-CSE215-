@@ -8,66 +8,65 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
-public class FitnessTracker {
-    
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+public class FitnessTracker {
+    private static JFrame frame;
+    private static List<UserClass> users;
     public static void HomeScreen(List<UserClass> users){
-        int UserInput;
-        System.out.println("1. Login");
-        System.out.println("2. Sign up");
-        Scanner s = new Scanner(System.in);
-        UserInput = s.nextInt();
-        if(UserInput == 1){
-            Login(users);
-        }
-        else if(UserInput == 2){
-            SignUp(users);
-            Login(users);
-        }
-        else {
-            System.out.println("Error");
-            HomeScreen(users);
-        }
+        frame = new JFrame("Fitness Tracker");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+        frame.setLayout(new FlowLayout());
+
+        JLabel welcomeLabel = new JLabel("Welcome to Fitness Tracker");
+        JButton loginButton = new JButton("Login");
+        JButton signupButton = new JButton("Sign Up");
+
+        loginButton.addActionListener(e -> Login());
+        signupButton.addActionListener(e -> SignUp(users));
+
+        frame.add(welcomeLabel);
+        frame.add(loginButton);
+        frame.add(signupButton);
+
+        frame.setVisible(true);
     }
-    public static void Login(List<UserClass> users){
-        
-        
-        
-        Scanner scanner = new Scanner(System.in);
-            UserClass loggedInUser = null;
-            int attempt = 5;
-            while(attempt > 0){
-            System.out.print("Enter username: ");
-            String inputUsername = scanner.next();
-            System.out.print("Enter password: ");
-            String inputPassword = scanner.next();
-             loggedInUser = LoginSystem.login(users, inputUsername, inputPassword);
-            if (loggedInUser!= null) {
-                System.out.println("Login successful! Welcome, " + loggedInUser.getName() + "!");
-                break; 
+    public static void Login(){
+        frame.getContentPane().removeAll();
+        frame.repaint();
+        frame.setSize(319, 287);
+        JLabel usernameLabel = new JLabel("Username:");
+        JTextField usernameField = new JTextField(20);
+        JLabel passwordLabel = new JLabel("Password:");
+        JPasswordField passwordField = new JPasswordField(20);
+        JButton loginButton = new JButton("Login");
+        loginButton.addActionListener(e -> {
+            String username = usernameField.getText();
+            String password = new String(passwordField.getPassword());
+            UserClass loggedInUser = LoginSystem.login(users, username, password);
+            if (loggedInUser != null) {
+                MainHub(loggedInUser);
             } else {
-                attempt --;
-                System.out.println("Invalid username or password. "+attempt+" left");
+                JOptionPane.showMessageDialog(frame, "Invalid credentials. Please try again.");
             }
-            
-            }
-            
-            System.out.println("What is your target weight");
-            double targetWeight = scanner.nextDouble();
-            WeightLoss wl = new WeightLoss(loggedInUser.getWeight(), targetWeight);
-            System.out.println("Enter your new weight");
-            double newWeight = scanner.nextDouble();
-            loggedInUser.setWeight(newWeight);
-            wl.setCurrentWeight(loggedInUser.getWeight());
-            System.out.println("You are "+wl.WeightDifference()+"kgs away from your goal");
-            
-            /*Running running = new Running(5.0);
-            System.out.println("Do you want to start running"+"\n"+"1. yes"+"\n"+"2. no");
-            int num = scanner.nextInt();
-            if(num == 1){
-                running.startWorkout();
-            }*/
+        });
+
+        frame.add(usernameLabel);
+        frame.add(usernameField);
+        frame.add(passwordLabel);
+        frame.add(passwordField);
+        frame.add(loginButton);
+
+        frame.revalidate();
+       
+
             
     }
     public static void SignUp(List<UserClass> users){
@@ -100,38 +99,14 @@ public class FitnessTracker {
         }
 
     }
-    public static void MainHub(String Name/*need to pass userID here*/){
-       System.out.println("Welcome Back "+Name);
-       //1. Add fitness goals
-       //2.tracking progress
-       //3. modify goals
+    public static void MainHub(UserClass user){
+       System.out.println("Welcome "+user.getName());
     }
     public static void main(String[] args) {
-        List<UserClass> users = readUsersFromFile("UserInfo.txt");
-        /*for(UserClass user : users){
-            System.out.println("UserName: "+user.getUsername());
-            System.out.println("Password: "+user.getPassword());
-            System.out.println("UserID: "+user.getUserID());
-            System.out.println("Name: "+user.getName());
-            System.out.println("Age: "+user.getAge());
-            System.out.println("Height: "+user.getHeight());
-            System.out.println("Weight: "+user.getWeight());
-            System.out.println("Weight Loss Target: "+user.getWeightLossTarget());
-            System.out.println("Weight Gain Target: "+user.getWeightGainTarget());
-            System.out.println("Running Distance: "+user.getRunningTaget());
-        }*/
+        users = readUsersFromFile("UserInfo.txt");
         HomeScreen(users);
     }
-    /* private static List<UserClass> initializeUsers() {
-        List<UserClass> users = new ArrayList<>();
-        users.add(new UserClass("Alice", "password123","Alice", 13, 189, 180));
-        users.add(new UserClass("Bob", "qwerty", "Builder", 89, 200, 89));
-        users.add(new UserClass("Charlie", "letmein","Chaplin", 69, 120, 60));
-        users.add(new UserClass("Dave", "securepass","Dave", 45, 210, 89));
-        users.add(new UserClass("Eve", "123456", "Adam", 80, 190, 80));
 
-        return users;
-    }*/
      private static List<UserClass> readUsersFromFile(String filePath) {
         List<UserClass> users = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -160,7 +135,6 @@ public class FitnessTracker {
 
                 UserClass user = new UserClass(UserID ,Username, Password, name, age, height, weight, weightLoss, weightGain, running);
 
-                // weightloss goals reading
                 
                 
 
