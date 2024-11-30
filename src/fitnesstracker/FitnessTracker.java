@@ -159,6 +159,7 @@ public class FitnessTracker {
                 }
                 // Parse user data
                 int UserID = Integer.parseInt(parts[0]);
+                
                 String Username = parts[1];
                 String Password = parts[2];
                 String name = parts[3];
@@ -172,18 +173,17 @@ public class FitnessTracker {
                 WeightGain weightGain = new WeightGain(weight, targetWeight2);
                 Running running = new Running(targetDistance);
 
-                UserClass user = new UserClass(UserID ,Username, Password, name, age, height, weight, weightLoss, weightGain, running);
-
-                
+                UserClass user = new UserClass(Username, Password, name, age, height, weight);
                 
 
                 users.add(user);
                 maxID = Math.max(maxID, UserID);
+               
             }
             UserClass.setIdCounter(maxID+1);
-            for(UserClass user : users){
-                System.out.println(" "+user.getUserID());
-            }
+            /*for(UserClass user : users){
+                System.out.println(" "+user.getUserID()+" "+user.getName());
+            }*/
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
         }
