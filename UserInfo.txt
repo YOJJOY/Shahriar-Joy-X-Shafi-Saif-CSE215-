@@ -1,6 +1,6 @@
-1234,Alice,password123,Alice,13,189.0,180.0,100.0,0.0,10.5
-1235,Bob,qwerty,Builder,89,200.0,89.0,0.0,180.0,0.0
-1236,Charlie,letmein,Chaplin,69,120.0,60.0,0.0,80.0,0.0
-1237,ShafiSaif,Kuddus,Shafi Bin Saif,20,170.0,90.0,0.0,0.0,0.0
+1234,Alice,password123,Alice,13,189.0,180.0,0.0,0.0,0.0
+1235,Bob,qwerty,Builder,89,200.0,89.0,0.0,0.0,0.0
+1236,Charlie,letmein,Chaplin,69,120.0,60.0,0.0,0.0,0.0
+1237,ShafiSaif,Kuddus,Shafi Bin Saif,20,170.0,90.0,63.0,0.0,0.0
 1238,YOJOY,skinnyxx,Sahriar Joy,23,170.0,67.0,0.0,0.0,0.0
 1239,Hasib,pini,Ehsanur Rahman Hasib,23,180.0,100.0,0.0,0.0,0.0

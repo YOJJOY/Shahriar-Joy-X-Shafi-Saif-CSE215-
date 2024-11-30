@@ -56,11 +56,11 @@ public class FitnessTracker {
         JLabel passwordLabel = new JLabel("Password:");
         JPasswordField passwordField = new JPasswordField(20);
         JButton loginButton = new JButton("Login");
-        List<UserClass> updatedUsers = readUsersFromFile("UserInfo.txt");
+        users = readUsersFromFile("UserInfo.txt");
         loginButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
-            UserClass loggedInUser = LoginSystem.login(updatedUsers, username, password);
+            UserClass loggedInUser = LoginSystem.login(users, username, password);
             if (loggedInUser != null) {
                 loginFrame.dispose();
                 MainHub(loggedInUser);
@@ -142,7 +142,7 @@ public class FitnessTracker {
         MainHubframe.setVisible(true);
     }
     public static void main(String[] args) {
-        users = readUsersFromFile("UserInfo.txt");
+
         HomeScreen();
     }
 
@@ -174,7 +174,7 @@ public class FitnessTracker {
                 Running running = new Running(targetDistance);
 
                 UserClass user = new UserClass(Username, Password, name, age, height, weight);
-                
+                System.out.println("UserID: "+user.getUserID());
 
                 users.add(user);
                 maxID = Math.max(maxID, UserID);
@@ -190,7 +190,8 @@ public class FitnessTracker {
         return users;
     }
      private static void writeUsersToFile(List<UserClass> users, String filePath) {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+         
+         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
         for (UserClass user : users) {
             // Format user data into a CSV string
             String userLine = formatUserForFile(user);
@@ -328,6 +329,7 @@ public class FitnessTracker {
     confirmButton.addActionListener(e -> {
         double targetWeight = weightLossGoalSlider.getValue();
         user.getWeightLoss().setTargetWeight(targetWeight);
+        updateUserInfo(users, user);
         writeUsersToFile(users, "UserInfo.txt");
         JOptionPane.showMessageDialog(sliderFrame, 
                 "Weight loss goal set to: " + targetWeight + " kg", 
@@ -344,6 +346,21 @@ public class FitnessTracker {
 
         
     }
+    public static void updateUserInfo(List<UserClass> users, UserClass user) {
+        System.out.println(user.getUserID());
+        for (UserClass Listuser : users) {
+            System.out.println(Listuser.getUserID());
+        if(Listuser.getUserID() == user.getUserID()){
+            System.out.println("weightloss targer "+Listuser.getWeightLoss().getTargetWeight());
+            Listuser.getWeightLoss().setTargetWeight(user.getWeightLoss().getTargetWeight());
+            Listuser.getWeightGain().setTargetWeight(user.getWeightGain().getTargetWeight());
+            Listuser.setWeight(user.getWeight());
+            Listuser.getRunning().setDistance(user.getRunning().getDistance());
+            System.out.println("weightloss targer "+Listuser.getWeightLoss().getTargetWeight());
+            break;
+        }
+    }
+}
     
 }
 class LoginSystem {
@@ -351,7 +368,7 @@ class LoginSystem {
         // Check if any user matches the provided credentials
         for (UserClass user : users) {
             if (user.getUsername().equals(inputUsername) && user.getPassword().equals(inputPassword)) {
-                System.out.println("Login successful! Welcome, " + user.getUsername() + "!");
+                System.out.println("Login successful! Welcome, " + user.getUsername() + " "+"ID: "+user.getUserID());
                 return user;
             }
         }
