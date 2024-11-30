@@ -17,20 +17,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class FitnessTracker {
-    private static JFrame frame;
+
     private static List<UserClass> users;
-    public static void HomeScreen(List<UserClass> users){
-        frame = new JFrame("Fitness Tracker");
+    public static void HomeScreen(){
+        JFrame frame = new JFrame("Fitness Tracker");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
         frame.setLayout(new FlowLayout());
-
+        
+        frame.setLocationRelativeTo(null);
+        
         JLabel welcomeLabel = new JLabel("Welcome to Fitness Tracker");
         JButton loginButton = new JButton("Login");
         JButton signupButton = new JButton("Sign Up");
-
-        loginButton.addActionListener(e -> Login());
-        signupButton.addActionListener(e -> SignUp(users));
+        
+        loginButton.addActionListener(e -> {
+            Login();
+            frame.dispose();
+                });
+        signupButton.addActionListener(e -> {
+            frame.dispose();
+            new SignUpGUI(users);});
 
         frame.add(welcomeLabel);
         frame.add(loginButton);
@@ -39,33 +46,37 @@ public class FitnessTracker {
         frame.setVisible(true);
     }
     public static void Login(){
-        frame.getContentPane().removeAll();
-        frame.repaint();
-        frame.setSize(319, 287);
+
+        JFrame loginFrame = new JFrame("Fitness Tracker - Login");
+        loginFrame.setSize(319, 287);
+        loginFrame.setLayout(new FlowLayout());
+        loginFrame.setLocationRelativeTo(null);
         JLabel usernameLabel = new JLabel("Username:");
         JTextField usernameField = new JTextField(20);
         JLabel passwordLabel = new JLabel("Password:");
         JPasswordField passwordField = new JPasswordField(20);
         JButton loginButton = new JButton("Login");
+        List<UserClass> updatedUsers = readUsersFromFile("UserInfo.txt");
         loginButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
-            UserClass loggedInUser = LoginSystem.login(users, username, password);
+            UserClass loggedInUser = LoginSystem.login(updatedUsers, username, password);
             if (loggedInUser != null) {
+                loginFrame.dispose();
                 MainHub(loggedInUser);
             } else {
-                JOptionPane.showMessageDialog(frame, "Invalid credentials. Please try again.");
+                JOptionPane.showMessageDialog(loginFrame, "Invalid credentials. Please try again.");
             }
         });
 
-        frame.add(usernameLabel);
-        frame.add(usernameField);
-        frame.add(passwordLabel);
-        frame.add(passwordField);
-        frame.add(loginButton);
+        loginFrame.add(usernameLabel);
+        loginFrame.add(usernameField);
+        loginFrame.add(passwordLabel);
+        loginFrame.add(passwordField);
+        loginFrame.add(loginButton);
 
-        frame.revalidate();
-       
+        
+        loginFrame.setVisible(true);
 
             
     }
@@ -85,26 +96,54 @@ public class FitnessTracker {
         double weight = s.nextDouble();
        UserClass user = new UserClass(UserName, Password, name, age, height, weight);
        addUser(users, user, "UserInfo.txt");
-       for(UserClass user1 : users){
-            System.out.println("UserName: "+user1.getUsername());
-            System.out.println("Password: "+user1.getPassword());
-            System.out.println("UserID: "+user1.getUserID());
-            System.out.println("Name: "+user1.getName());
-            System.out.println("Age: "+user1.getAge());
-            System.out.println("Height: "+user1.getHeight());
-            System.out.println("Weight: "+user1.getWeight());
-            System.out.println("Weight Loss Target: "+user1.getWeightLossTarget());
-            System.out.println("Weight Gain Target: "+user1.getWeightGainTarget());
-            System.out.println("Running Distance: "+user1.getRunningTaget());
-        }
+     
 
     }
     public static void MainHub(UserClass user){
-       System.out.println("Welcome "+user.getName());
+        
+        JFrame MainHubframe = new JFrame("Fitness Tracker - Main Hub");
+        MainHubframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        MainHubframe.setSize(400, 300);
+        
+
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+
+
+        JLabel welcomeLabel = new JLabel("Welcome to Fitness Tracker", JLabel.CENTER);
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        panel.add(welcomeLabel, BorderLayout.NORTH);
+
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(1, 3, 10, 10));
+
+
+        JButton weightGainButton = new JButton("Weight Gain");
+        JButton weightLossButton = new JButton("Weight Loss");
+        JButton runningButton = new JButton("Running");
+
+
+        weightGainButton.addActionListener(e -> WeightGainScreen(user));
+        weightLossButton.addActionListener(e -> WeightLossScreen(user));
+        runningButton.addActionListener(e -> RunningScreen(user));
+
+
+        buttonPanel.add(weightGainButton);
+        buttonPanel.add(weightLossButton);
+        buttonPanel.add(runningButton);
+
+
+        panel.add(buttonPanel, BorderLayout.CENTER);
+
+
+        MainHubframe.add(panel);
+        MainHubframe.setVisible(true);
     }
     public static void main(String[] args) {
         users = readUsersFromFile("UserInfo.txt");
-        HomeScreen(users);
+        HomeScreen();
     }
 
      private static List<UserClass> readUsersFromFile(String filePath) {
@@ -142,11 +181,29 @@ public class FitnessTracker {
                 maxID = Math.max(maxID, UserID);
             }
             UserClass.setIdCounter(maxID+1);
+            for(UserClass user : users){
+                System.out.println(" "+user.getUserID());
+            }
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
         }
         return users;
     }
+     private static void writeUsersToFile(List<UserClass> users, String filePath) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+        for (UserClass user : users) {
+            // Format user data into a CSV string
+            String userLine = formatUserForFile(user);
+            // Write the formatted line to the file
+            writer.write(userLine);
+            writer.newLine(); // Move to the next line for the next user
+        }
+        System.out.println("Users successfully written to file.");
+    } catch (IOException e) {
+        System.out.println("Error writing to file: " + e.getMessage());
+    }
+}
+
     public static void addUser(List<UserClass> users, UserClass newUser, String filePath) {
         // Step 1: Add the user to the list
         users.add(newUser);
@@ -176,6 +233,116 @@ public class FitnessTracker {
         sb.append(user.getWeightGain().getTargetWeight()).append(",");
         sb.append(user.getRunning().getDistance());
         return sb.toString();
+    }
+
+    private static void WeightGainScreen(UserClass user) {
+    // Create frame
+    JFrame weightGainFrame = new JFrame("Fitness Tracker - Weight Gain");
+    weightGainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    weightGainFrame.setSize(400, 300);
+    weightGainFrame.setLocationRelativeTo(null);
+
+    // Create panel and layout
+    JPanel panel = new JPanel();
+    panel.setLayout(new GridLayout(3, 1, 10, 10)); // Three buttons in a column
+
+    // Create buttons
+    JButton setGoalButton = new JButton("Set Weight Gain Goal");
+    JButton logWeightButton = new JButton("Log Daily Weight");
+    JButton viewProgressButton = new JButton("View Weight Gain Progress");
+    
+    
+    
+    panel.add(setGoalButton);
+    panel.add(logWeightButton);
+    panel.add(viewProgressButton);
+
+    // Add panel to the frame
+    weightGainFrame.add(panel);
+
+    // Display the frame
+    weightGainFrame.setVisible(true);
+    }
+
+    private static void WeightLossScreen(UserClass user) {
+    JFrame weightLossFrame = new JFrame("Fitness Tracker - Weight Gain");
+    weightLossFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    weightLossFrame.setSize(400, 300);
+    weightLossFrame.setLocationRelativeTo(null);
+
+    // Create panel and layout
+    JPanel panel = new JPanel();
+    panel.setLayout(new GridLayout(3, 1, 10, 10)); // Three buttons in a column
+
+    // Create buttons
+    JButton setGoalButton = new JButton("Set Weight Gain Goal");
+    JButton logWeightButton = new JButton("Log Daily Weight");
+    JButton viewProgressButton = new JButton("View Weight Gain Progress");
+    
+    
+    setGoalButton.addActionListener(e -> addWeightLossGoal(user));
+    panel.add(setGoalButton);
+    panel.add(logWeightButton);
+    panel.add(viewProgressButton);
+
+    // Add panel to the frame
+    weightLossFrame.add(panel);
+
+    // Display the frame
+    weightLossFrame.setVisible(true);
+    }
+
+    private static void RunningScreen(UserClass user) {
+        
+    }
+    private static void addWeightLossGoal(UserClass user){
+    JFrame sliderFrame = new JFrame("Set Weight Loss Goal");
+    sliderFrame.setSize(400, 200);
+    sliderFrame.setLocationRelativeTo(null);
+    sliderFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    // Create a new panel for the slider and label
+    JPanel panel = new JPanel();
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+    // Create a slider with a range from 30 to 200 kg, default value at 70
+    JSlider weightLossGoalSlider = new JSlider(JSlider.HORIZONTAL, 30, 200, 70);
+    weightLossGoalSlider.setMajorTickSpacing(10);
+    weightLossGoalSlider.setMinorTickSpacing(1);
+    weightLossGoalSlider.setPaintTicks(true);
+    weightLossGoalSlider.setPaintLabels(true);
+
+    // Add a label to show the current value of the slider
+    JLabel currentGoalLabel = new JLabel("Set your weight loss goal (kg): 70");
+    panel.add(currentGoalLabel);
+    panel.add(weightLossGoalSlider);
+
+    // Add an event listener to update the label when the slider value changes
+    weightLossGoalSlider.addChangeListener(e -> {
+        double currentValue = weightLossGoalSlider.getValue();
+        currentGoalLabel.setText("Set your weight loss goal (kg): " + currentValue);
+    });
+
+    // Create a button to confirm the selected goal
+    JButton confirmButton = new JButton("Set Goal");
+    confirmButton.addActionListener(e -> {
+        double targetWeight = weightLossGoalSlider.getValue();
+        user.getWeightLoss().setTargetWeight(targetWeight);
+        writeUsersToFile(users, "UserInfo.txt");
+        JOptionPane.showMessageDialog(sliderFrame, 
+                "Weight loss goal set to: " + targetWeight + " kg", 
+                "Goal Set", JOptionPane.INFORMATION_MESSAGE);
+        sliderFrame.dispose();  // Close the slider frame
+    });
+
+    // Add the confirm button to the panel
+    panel.add(confirmButton);
+
+    // Show the frame with the slider
+    sliderFrame.add(panel);
+    sliderFrame.setVisible(true);
+
+        
     }
     
 }

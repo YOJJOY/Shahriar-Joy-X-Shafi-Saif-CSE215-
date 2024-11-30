@@ -43,7 +43,7 @@ public class UserClass {
         this(Username, Password, name, age, height, weight, new WeightLoss(weight, 0.0), new WeightGain(weight, 0.0), new Running(0.0));
     }
 
-    public UserClass(int UserID,String Username, String Password, String name, int age, double height, double weight, WeightLoss weightLoss, WeightGain weightGain, Running running) {
+    public UserClass(int UserID, String Username, String Password, String name, int age, double height, double weight, WeightLoss weightLoss, WeightGain weightGain, Running running) {
         this.Username = Username;
         this.Password = Password;
         this.name = name;
@@ -155,6 +155,9 @@ public class UserClass {
 
     public static void setIdCounter(int idCounter) {
         UserClass.idCounter = idCounter;
+    }
+    public void setWeightLossTarget(double value){
+        weightLoss.setTargetWeight(value);
     }
 
     @Override
