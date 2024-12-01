@@ -9,7 +9,8 @@ package fitnesstracker;
  * @author SHAFI
  */
 public class UserClass {
-     private static int idCounter = 1234;
+    private static int idCounter = 1234;
+    RunningUpdateCallback callback;
     private int UserID;
     private String Username;
     private String Password;
@@ -17,6 +18,7 @@ public class UserClass {
     private int age;
     private double height;
     private double weight;
+    private double currentWeight;
     private WeightLoss weightLoss;
     private WeightGain weightGain;
     private Running running;
@@ -25,7 +27,7 @@ public class UserClass {
         UserID++;
     }
 
-    public UserClass(String username, String password, String name, int age, double height, double weight,
+    public UserClass(String username, String password, String name, int age, double height, double weight, double currentWeight,
                      WeightLoss weightLoss, WeightGain weightGain, Running running) {
         this.UserID = idCounter++; // Auto-increment userID
         this.Username = username;
@@ -34,26 +36,27 @@ public class UserClass {
         this.age = age;
         this.height = height;
         this.weight = weight;
+        this.currentWeight = currentWeight;
         this.weightLoss = weightLoss;
         this.weightGain = weightGain;
         this.running = running;
     }
 
-    public UserClass(String Username, String Password, String name, int age, double height, double weight) {
-        this(Username, Password, name, age, height, weight, new WeightLoss(weight, 0.0), new WeightGain(weight, 0.0), new Running(0.0));
+    public UserClass(String Username, String Password, String name, int age, double height, double weight, double currentWeight) {
+        this(Username, Password, name, age, height, weight, currentWeight, 
+             new WeightLoss(weight, 0.0), new WeightGain(weight, 0.0), null);
+        this.running = new Running(0.0, null); 
     }
 
-    public UserClass(int UserID, String Username, String Password, String name, int age, double height, double weight, WeightLoss weightLoss, WeightGain weightGain, Running running) {
-        this.Username = Username;
-        this.Password = Password;
-        this.name = name;
-        this.age = age;
-        this.height = height;
-        this.weight = weight;
-        this.weightLoss = weightLoss;
-        this.weightGain = weightGain;
-        this.running = running;
+    public double getCurrentWeight() {
+        return currentWeight;
     }
+
+    public void setCurrentWeight(double currentWeight) {
+        this.currentWeight = currentWeight;
+    }
+
+    
     
     
     

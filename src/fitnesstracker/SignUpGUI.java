@@ -95,9 +95,10 @@ public class SignUpGUI {
             int age = Integer.parseInt(ageField.getText());
             double height = Double.parseDouble(heightField.getText());
             double weight = Double.parseDouble(weightField.getText());
+             
 
             
-            UserClass newUser = new UserClass(username, password, name, age, height, weight);
+            UserClass newUser = new UserClass(username, password, name, age, height, weight, weight);
 
             
             FitnessTracker.addUser(users, newUser, "UserInfo.txt");

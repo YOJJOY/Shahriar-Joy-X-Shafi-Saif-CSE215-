@@ -18,8 +18,8 @@ public class WeightGain extends WeightLoss {
     }
     public double WeightDifference(){
         if(getCurrentWeight() <= getTargetWeight()){
-            return getCurrentWeight()-getTargetWeight();
+            return getTargetWeight()-getCurrentWeight();
         }
-        else return 0;
+        else return getTargetWeight();
     }
 }

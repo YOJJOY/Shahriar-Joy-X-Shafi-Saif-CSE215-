@@ -11,36 +11,31 @@ import java.util.Scanner;
  *
  * @author SHAFI
  */
-public class Running implements Runnable{
-    
-    private double distance; // Distance covered in kilometers
+public class Running implements Runnable {
+
+    private double distance; // Target distance in kilometers
     private long startTime; // Start time in milliseconds
     private volatile boolean isRunning; // Flag to indicate if the workout is ongoing
-    public Running(double distance) {
+    private double currentDistance; // Distance covered in kilometers
+    private final double averageSpeed = 8.0; // Average speed in km/h for a beginner runner
+    private RunningUpdateCallback callback; // Interface for updating the GUI
+
+    public Running(double distance, RunningUpdateCallback callback) {
         this.distance = distance;
         this.startTime = 0;
         this.isRunning = false;
+        this.currentDistance = 0.0;
+        this.callback = callback;
     }
+
     public void startWorkout() {
-        
         this.startTime = System.currentTimeMillis();
         this.isRunning = true;
         System.out.println("Workout started!");
 
-        // Start a new thread for real-time tracking
+        // Start the workout tracking thread
         Thread trackingThread = new Thread(this);
         trackingThread.start();
-        Thread inputThread = new Thread(() -> {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Type 's' to end the workout:");
-            while (isRunning) {
-                String input = scanner.nextLine();
-                if (input.equalsIgnoreCase("s")) {
-                    endWorkout();
-                }
-            }
-        });
-        inputThread.start();
     }
 
     public void endWorkout() {
@@ -51,7 +46,11 @@ public class Running implements Runnable{
         this.isRunning = false;
         System.out.println("Workout ended!");
         trackDuration(); // Display final duration
+        if (callback != null) {
+            callback.onWorkoutEnded(currentDistance);
+        }
     }
+
     public void trackDuration() {
         long currentTime = System.currentTimeMillis();
         long elapsedTime = currentTime - this.startTime;
@@ -60,19 +59,34 @@ public class Running implements Runnable{
         long minutes = (elapsedTime / (1000 * 60)) % 60;
         long hours = (elapsedTime / (1000 * 60 * 60)) % 24;
 
-        System.out.println("Elapsed time: " + hours + "h " + minutes + "m " + seconds + "s");
+        String timeElapsed = String.format("%02dh %02dm %02ds", hours, minutes, seconds);
+        if (callback != null) {
+            callback.onUpdateElapsedTime(timeElapsed);
+        }
     }
+
     @Override
     public void run() {
         while (isRunning) {
             try {
-                // Wait for 1 second before updating the display
-                Thread.sleep(1000);
+                Thread.sleep(1000); // Update every second
+                trackDuration();
+                updateDistance();
+                if (currentDistance >= distance) {
+                    endWorkout();
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            // Print the elapsed time in real time
-            trackDuration();
+        }
+    }
+
+    private void updateDistance() {
+        long elapsedTime = System.currentTimeMillis() - this.startTime; // milliseconds
+        double elapsedHours = elapsedTime / (1000.0 * 60.0 * 60.0); // convert to hours
+        this.currentDistance = elapsedHours * averageSpeed;
+        if (callback != null) {
+            callback.onUpdateDistance(currentDistance);
         }
     }
 
@@ -83,5 +97,4 @@ public class Running implements Runnable{
     public void setDistance(double distance) {
         this.distance = distance;
     }
-    
 }
