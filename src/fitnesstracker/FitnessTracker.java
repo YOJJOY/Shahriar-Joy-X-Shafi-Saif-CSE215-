@@ -24,7 +24,7 @@ public class FitnessTracker {
     public static void HomeScreen(){
         JFrame frame = new JFrame("Fitness Tracker");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
+        frame.setSize(800, 800);
         frame.setLayout(new FlowLayout());
         
         frame.setLocationRelativeTo(null);
@@ -111,7 +111,7 @@ public class FitnessTracker {
         
         JFrame MainHubframe = new JFrame("Fitness Tracker - Main Hub");
         MainHubframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        MainHubframe.setSize(400, 300);
+        MainHubframe.setSize(800, 800);
         MainHubframe.setLocationRelativeTo(null);
 
 
@@ -287,7 +287,7 @@ public class FitnessTracker {
     // Create frame
     JFrame weightGainFrame = new JFrame("Fitness Tracker - Weight Gain");
     weightGainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    weightGainFrame.setSize(400, 300);
+    weightGainFrame.setSize(800, 800);
     weightGainFrame.setLocationRelativeTo(null);
 
     // Create panel and layout
@@ -324,7 +324,7 @@ public class FitnessTracker {
     private static void WeightLossScreen(UserClass user) {
     JFrame weightLossFrame = new JFrame("Fitness Tracker - Weight Gain");
     weightLossFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    weightLossFrame.setSize(400, 300);
+    weightLossFrame.setSize(800, 800);
     weightLossFrame.setLocationRelativeTo(null);
 
     // Create panel and layout
@@ -360,7 +360,7 @@ public class FitnessTracker {
     // Create the frame
     JFrame runningFrame = new JFrame("Fitness Tracker - Running");
     runningFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    runningFrame.setSize(400, 300);
+    runningFrame.setSize(800, 800);
     runningFrame.setLocationRelativeTo(null);
 
     // Create a panel with GridLayout for buttons
@@ -392,7 +392,7 @@ public class FitnessTracker {
 }
 private static void startRun(UserClass user) {
     JFrame startRunFrame = new JFrame("Running - Live");
-    startRunFrame.setSize(400, 300);
+    startRunFrame.setSize(800, 800);
     startRunFrame.setLocationRelativeTo(null);
     startRunFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -436,7 +436,7 @@ private static void startRun(UserClass user) {
 }
 private static void setRunningDistance(UserClass user) {
     JFrame distanceFrame = new JFrame("Set Running Distance");
-    distanceFrame.setSize(400, 200);
+    distanceFrame.setSize(800, 800);
     distanceFrame.setLocationRelativeTo(null);
     distanceFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -480,7 +480,7 @@ private static void setRunningDistance(UserClass user) {
 
 
     JFrame progressFrame = new JFrame("Weight Loss Progress");
-    progressFrame.setSize(400, 250);
+    progressFrame.setSize(800, 800);
     progressFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     progressFrame.setLocationRelativeTo(null);
 
@@ -536,7 +536,7 @@ private static void setRunningDistance(UserClass user) {
     private static void updateCurrentWeight(UserClass user) {
     // Create frame for updating weight
     JFrame updateWeightFrame = new JFrame("Update Current Weight");
-    updateWeightFrame.setSize(400, 200);
+    updateWeightFrame.setSize(800, 800);
     updateWeightFrame.setLocationRelativeTo(null);
     updateWeightFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -596,7 +596,7 @@ private static void setRunningDistance(UserClass user) {
 }
     private static void addWeightGainGoal(UserClass user){
     JFrame sliderFrame = new JFrame("Set Weight Gain Goal");
-    sliderFrame.setSize(400, 200);
+    sliderFrame.setSize(800, 800);
     sliderFrame.setLocationRelativeTo(null);
     sliderFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -642,7 +642,7 @@ private static void setRunningDistance(UserClass user) {
         System.out.println("target weight: "+targetWeight);
         System.out.println("starting weight: "+startingWeight);
     JFrame progressFrame = new JFrame("Weight Gain Progress");
-    progressFrame.setSize(400, 250);
+    progressFrame.setSize(800, 800);
     progressFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     progressFrame.setLocationRelativeTo(null);
 
@@ -686,7 +686,7 @@ private static void setRunningDistance(UserClass user) {
     }
     private static void addWeightLossGoal(UserClass user){
     JFrame sliderFrame = new JFrame("Set Weight Loss Goal");
-    sliderFrame.setSize(400, 200);
+    sliderFrame.setSize(800, 800);
     sliderFrame.setLocationRelativeTo(null);
     sliderFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
